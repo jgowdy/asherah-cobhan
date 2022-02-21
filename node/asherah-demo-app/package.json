@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "asherah": "^1.0.3",
-    "cobhan": "^1.0.6"
+    "asherah": "^1.0.4"
   }
 }
