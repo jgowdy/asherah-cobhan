@@ -1,6 +1,6 @@
 {
   "name": "asherah",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Asherah envelope encryption and key rotation library",
   "main": "index.js",
   "type": "module",
@@ -19,6 +19,6 @@
     "binaries/*.dylib"
   ],
   "dependencies": {
-    "cobhan": "*"
+    "cobhan": "^1.0.6"
   }
 }
