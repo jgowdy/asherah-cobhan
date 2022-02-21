@@ -126,7 +126,6 @@ function encrypt(partitionId, data) {
         throw new Error('encrypt failed: ' + result);
     }
     const parentKeyId = cobhan.cbuffer_to_string(outputParentKeyIdBuffer);
-    console.log("Encrypt returned parent key ID: " + parentKeyId);
     const dataRowRecord = {
         Data: cobhan.cbuffer_to_buffer(outputEncryptedDataBuffer),
         Key: {
