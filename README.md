@@ -6,9 +6,9 @@ Example code:
 
 
 ```javascript
-import * as asherah from 'asherah'
+import { setup, encrypt, decrypt } from 'asherah'
 
-asherah.setup({
+setup({
   kmsType: 'static',
   metastore: 'memory',
   serviceName: 'TestService',
@@ -19,9 +19,9 @@ asherah.setup({
 
 const data = Buffer.from('mysecretdata', 'utf8');
 
-const encrypted = asherah.encrypt('partition', data);
+const encrypted = encrypt('partition', data);
 console.log(encrypted);
 
-const decrypted = asherah.decrypt('partition', encrypted);
+const decrypted = decrypt('partition', encrypted);
 console.log("Decrypted: " + decrypted.toString('utf8'));
 ```
