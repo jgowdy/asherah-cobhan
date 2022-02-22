@@ -5,18 +5,23 @@ This is a wrapper of the Asherah Go implementation using the Cobhan FFI library
 Example code: 
 
 
-```
-import asherah from 'asherah'
+```javascript
+import { setup, encrypt, decrypt } from 'asherah'
 
-asherah.setup('static', 'memory', null, null, null, null, null, 'TestService', 'TestProduct', null, true, true)
+setup({
+  kmsType: 'static',
+  metastore: 'memory',
+  serviceName: 'TestService',
+  productId: 'TestProduct',
+  verbose: true,
+  sessionCache: true
+});
 
-var data = Buffer.from('mysecretdata', 'utf8');
+const data = Buffer.from('mysecretdata', 'utf8');
 
-var encrypted = asherah.encrypt('partition', data);
+const encrypted = encrypt('partition', data);
 console.log(encrypted);
 
-var decrypted = asherah.decrypt('partition', encrypted);
-
+const decrypted = decrypt('partition', encrypted);
 console.log("Decrypted: " + decrypted.toString('utf8'));
-
 ```

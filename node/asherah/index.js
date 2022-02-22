@@ -36,20 +36,33 @@ import cobhan from 'cobhan'
     });
 
 /**
-* @param {string} kmsType
-* @param {string} metastore
-* @param {string} [rdbmsConnectionString]
-* @param {string} [dynamoDbEndpoint]
-* @param {string} [dynamoDbRegion]
-* @param {string} [dynamoDbTableName]
-* @param {boolean} [enableRegionSuffix]
-* @param {string} serviceName
-* @param {string} productId
-* @param {string} [preferredRegion]
-* @param {boolean} verbose
-* @param {boolean} sessionCache
+* @param {string} args.kmsType
+* @param {string} args.metastore
+* @param {string} args.serviceName
+* @param {string} args.productId
+* @param {string} [args.rdbmsConnectionString]
+* @param {string} [args.dynamoDbEndpoint]
+* @param {string} [args.dynamoDbRegion]
+* @param {string} [args.dynamoDbTableName]
+* @param {boolean} [args.enableRegionSuffix]
+* @param {string} [args.preferredRegion]
+* @param {boolean} [args.verbose]
+* @param {boolean} [args.sessionCache]
 */
-function setup(kmsType, metastore, rdbmsConnectionString, dynamoDbEndpoint, dynamoDbRegion, dynamoDbTableName, enableRegionSuffix, serviceName, productId, preferredRegion, verbose, sessionCache) {
+function setup({
+    kmsType,
+    metastore,
+    serviceName,
+    productId,
+    rdbmsConnectionString = null,
+    dynamoDbEndpoint = null,
+    dynamoDbRegion = null,
+    dynamoDbTableName = null,
+    enableRegionSuffix = null,
+    preferredRegion = null,
+    verbose = false,
+    sessionCache = false
+}) {
     const kmsTypeBuffer = cobhan.string_to_cbuffer(kmsType)
     const metastoreBuffer = cobhan.string_to_cbuffer(metastore)
     const rdbmsConnectionStringBuffer = cobhan.string_to_cbuffer(rdbmsConnectionString)
@@ -128,4 +141,4 @@ function encrypt(partitionId, data) {
     return dataRowRecord;
 }
 
-export default { encrypt, decrypt, setup };
+export { encrypt, decrypt, setup };
