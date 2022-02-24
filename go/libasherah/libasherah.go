@@ -128,18 +128,20 @@ func setupAsherah(kmsType string, metaStore string, rdbmsConnectionString string
 	options.EnableRegionSuffix = enableRegionSuffix
 	options.PreferredRegion = preferredRegion
 
-	regionMap := make(map[string]string)
-	pairs := strings.Split(regionMapStr, ",")
-	for _, pair := range pairs {
-		parts := strings.Split(pair, "=")
-		if len(parts) != 2 || len(parts[1]) == 0 {
-			panic("argument must be in the form of REGION1=ARN1[,REGION2=ARN2]")
+	if len(regionMapStr) > 0 {
+		regionMap := make(map[string]string)
+		pairs := strings.Split(regionMapStr, ",")
+		for _, pair := range pairs {
+			parts := strings.Split(pair, "=")
+			if len(parts) != 2 || len(parts[1]) == 0 {
+				panic("argument must be in the form of REGION1=ARN1[,REGION2=ARN2]")
+			}
+			region, arn := parts[0], parts[1]
+			regionMap[region] = arn
 		}
-		region, arn := parts[0], parts[1]
-		regionMap[region] = arn
-	}
 
-	options.RegionMap = regionMap
+		options.RegionMap = regionMap
+	}
 
 	globalSessionFactory = appencryption.NewSessionFactory(
 		&appencryption.Config{
