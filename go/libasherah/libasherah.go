@@ -5,8 +5,11 @@ import (
 )
 import (
 	"context"
+
 	"github.com/godaddy/asherah/go/securememory/memguard"
 	"godaddy.com/cobhan"
+
+	"unsafe"
 
 	"github.com/aws/aws-sdk-go/aws"
 	awssession "github.com/aws/aws-sdk-go/aws/session"
@@ -14,7 +17,6 @@ import (
 	"github.com/godaddy/asherah/go/appencryption/pkg/crypto/aead"
 	"github.com/godaddy/asherah/go/appencryption/pkg/kms"
 	"github.com/godaddy/asherah/go/appencryption/pkg/persistence"
-	"unsafe"
 )
 
 const ERR_NONE = 0
@@ -28,7 +30,8 @@ func main() {
 }
 
 var globalSessionFactory *appencryption.SessionFactory
-var globalCtx context.Context
+
+//var globalCtx context.Context
 var globalSession *appencryption.Session
 var globalInitialized = false
 
@@ -247,7 +250,7 @@ func Decrypt(partitionIdPtr unsafe.Pointer, encryptedDataPtr unsafe.Pointer, enc
 		},
 	}
 
-	var ctx context.Context
+	ctx := context.Background()
 	data, err := session.Decrypt(ctx, *drr)
 	if err != nil {
 		DebugOutput("Decrypt failed: " + err.Error())
@@ -287,7 +290,7 @@ func Encrypt(partitionIdPtr unsafe.Pointer, dataPtr unsafe.Pointer, outputEncryp
 		return ERR_GET_SESSION_FAILED
 	}
 
-	var ctx context.Context
+	ctx := context.Background()
 	drr, err := session.Encrypt(ctx, data)
 	if err != nil {
 		DebugOutput("Encrypt failed: " + err.Error())
