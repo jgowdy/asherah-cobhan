@@ -1,6 +1,6 @@
 {
   "name": "asherah",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Asherah envelope encryption and key rotation library",
   "main": "index.js",
   "type": "module",

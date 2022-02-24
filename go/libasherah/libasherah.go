@@ -128,7 +128,7 @@ func setupAsherah(kmsType string, metaStore string, rdbmsConnectionString string
 	options.EnableRegionSuffix = enableRegionSuffix
 	options.PreferredRegion = preferredRegion
 
-	var regionMap RegionMap
+	regionMap := make(map[string]string)
 	pairs := strings.Split(regionMapStr, ",")
 	for _, pair := range pairs {
 		parts := strings.Split(pair, "=")
