@@ -32,7 +32,7 @@ import cobhan from 'cobhan'
   const libasherah = cobhan.load_platform_library('node_modules/asherah/binaries', 'libasherah', {
     'Encrypt': ['int32', ['pointer', 'pointer', 'pointer', 'pointer', 'pointer', 'pointer', 'pointer']],
     'Decrypt': ['int32', ['pointer', 'pointer', 'pointer', 'int64', 'pointer', 'int64', 'pointer']],
-    'Setup': ['int32', ['pointer', 'pointer', 'pointer', 'pointer', 'pointer', 'pointer', 'int32', 'pointer', 'pointer', 'pointer', 'int32', 'int32' ]],
+    'Setup': ['int32', ['pointer', 'pointer', 'pointer', 'pointer', 'pointer', 'pointer', 'int32', 'pointer', 'pointer', 'pointer', 'pointer', 'int32', 'int32' ]],
     });
 
 /**
