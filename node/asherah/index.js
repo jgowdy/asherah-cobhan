@@ -46,6 +46,7 @@ import cobhan from 'cobhan'
 * @param {string} [args.dynamoDbTableName]
 * @param {boolean} [args.enableRegionSuffix]
 * @param {string} [args.preferredRegion]
+* @param {string} [args.regionMap]
 * @param {boolean} [args.verbose]
 * @param {boolean} [args.sessionCache]
 */
