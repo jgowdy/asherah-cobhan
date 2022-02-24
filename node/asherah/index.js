@@ -60,6 +60,7 @@ function setup({
     dynamoDbTableName = null,
     enableRegionSuffix = null,
     preferredRegion = null,
+    regionMap = null,
     verbose = false,
     sessionCache = false
 }) {
@@ -73,10 +74,11 @@ function setup({
     const serviceNameBuffer = cobhan.string_to_cbuffer(serviceName)
     const productIdBuffer = cobhan.string_to_cbuffer(productId)
     const preferredRegionBuffer = cobhan.string_to_cbuffer(preferredRegion)
+    const regionMapBuffer = cobhan.string_to_cbuffer(regionMap)
     const verboseInt = verbose ? 1 : 0
     const sessionCacheInt = sessionCache ? 1 : 0
 
-    const result = libasherah.Setup(kmsTypeBuffer, metastoreBuffer, rdbmsConnectionStringBuffer, dynamoDbEndpointBuffer, dynamoDbRegionBuffer, dynamoDbTableNameBuffer, enableRegionSuffixInt, serviceNameBuffer, productIdBuffer, preferredRegionBuffer, verboseInt, sessionCacheInt);
+    const result = libasherah.Setup(kmsTypeBuffer, metastoreBuffer, rdbmsConnectionStringBuffer, dynamoDbEndpointBuffer, dynamoDbRegionBuffer, dynamoDbTableNameBuffer, enableRegionSuffixInt, serviceNameBuffer, productIdBuffer, preferredRegionBuffer, regionMapBuffer, verboseInt, sessionCacheInt);
     if (result < 0) {
         throw new Error('setup failed: ' + result);
     }

@@ -5,6 +5,7 @@ import (
 )
 import (
 	"context"
+	"strings"
 
 	"github.com/godaddy/asherah/go/securememory/memguard"
 	"godaddy.com/cobhan"
@@ -40,10 +41,10 @@ func init() {
 
 //export Setup
 func Setup(kmsTypePtr unsafe.Pointer, metastorePtr unsafe.Pointer, rdbmsConnectionStringPtr unsafe.Pointer, dynamoDbEndpointPtr unsafe.Pointer, dynamoDbRegionPtr unsafe.Pointer,
-	dynamoDbTableNamePtr unsafe.Pointer, enableRegionSuffixInt int32, serviceNamePtr unsafe.Pointer, productIdPtr unsafe.Pointer, preferredRegionPtr unsafe.Pointer, verboseInt int32,
+	dynamoDbTableNamePtr unsafe.Pointer, enableRegionSuffixInt int32, serviceNamePtr unsafe.Pointer, productIdPtr unsafe.Pointer, preferredRegionPtr unsafe.Pointer, regionMapPtr unsafe.Pointer, verboseInt int32,
 	sessionCacheInt int32) int32 {
 
-	if globalInitialized == true {
+	if globalInitialized {
 		return ERR_ALREADY_INITIALIZED
 	}
 
@@ -94,19 +95,24 @@ func Setup(kmsTypePtr unsafe.Pointer, metastorePtr unsafe.Pointer, rdbmsConnecti
 		return result
 	}
 
+	regionMapStr, result := cobhan.BufferToString(regionMapPtr)
+	if result != 0 {
+		return result
+	}
+
 	verbose := verboseInt != 0
 
 	sessionCache := sessionCacheInt != 0
 
 	setupAsherah(kmsType, metastore, rdbmsConnectionString, dynamoDbEndpoint, dynamoDbRegion, dynamoDbTableName,
-		enableRegionSuffix, serviceName, productId, preferredRegion, verbose, sessionCache)
+		enableRegionSuffix, serviceName, productId, preferredRegion, regionMapStr, verbose, sessionCache)
 
 	return ERR_NONE
 }
 
 func setupAsherah(kmsType string, metaStore string, rdbmsConnectionString string, dynamoDbEndpoint string,
 	dynamoDbRegion string, dynamoDbTableName string, enableRegionSuffix bool, serviceName string, productId string,
-	preferredRegion string, verbose bool, sessionCache bool) {
+	preferredRegion string, regionMapStr string, verbose bool, sessionCache bool) {
 	options := &Options{}
 	options.KMS = kmsType             // "kms"
 	options.ServiceName = serviceName // "chatterbox"
@@ -121,6 +127,19 @@ func setupAsherah(kmsType string, metaStore string, rdbmsConnectionString string
 	options.DynamoDBTableName = dynamoDbTableName
 	options.EnableRegionSuffix = enableRegionSuffix
 	options.PreferredRegion = preferredRegion
+
+	var regionMap RegionMap
+	pairs := strings.Split(regionMapStr, ",")
+	for _, pair := range pairs {
+		parts := strings.Split(pair, "=")
+		if len(parts) != 2 || len(parts[1]) == 0 {
+			panic("argument must be in the form of REGION1=ARN1[,REGION2=ARN2]")
+		}
+		region, arn := parts[0], parts[1]
+		regionMap[region] = arn
+	}
+
+	options.RegionMap = regionMap
 
 	globalSessionFactory = appencryption.NewSessionFactory(
 		&appencryption.Config{
